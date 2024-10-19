@@ -11,7 +11,6 @@ local active_list = {}
 local function write_configurations()
 	local file = io.open(config_list_file, "w")
 	if not file then
-		print("Error opening config_list_file.")
 		return false
 	end
 	local encoded = vim.fn.json_encode(configs_list)
@@ -19,7 +18,6 @@ local function write_configurations()
 	file:close()
 	file = io.open(config_actives_file, "w")
 	if not file then
-		print("Error opening config_actives_file.")
 		return false
 	end
 	encoded = vim.fn.json_encode(active_list)
@@ -29,9 +27,9 @@ local function write_configurations()
 end
 
 local function read_configurations()
+	vim.fn.mkdir(vim.fn.stdpath("data") .. "/clanger", "p")
 	local file = io.open(config_list_file, "r")
 	if not file then
-		print("Error opening config_list_file.")
 		return false
 	end
 
