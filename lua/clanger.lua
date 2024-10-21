@@ -419,29 +419,6 @@ function M.setup(opts)
 	end
 end
 
--- -- configure c/c++ server
--- lspconfig["clangd"].setup({
--- 	cmd = {
--- 		"clangd",
--- 		"--header-insertion=never",
--- 		"--background-index",
--- 		"--clang-tidy",
--- 		"--limit-references=0",
--- 		"--limit-results=0",
--- 		"--log=error",
--- 		"--offset-encoding=utf-16",
--- 		"--function-arg-placeholders=false",
--- 		--"--query-driver=/applications/armgnutoolchain/13.2.rel1/arm-none-eabi/bin/*gcc*",
--- 		-- "--query-driver=/usr/bin/aarch64-linux-gnu-gcc*",
--- 		-- "--query-driver=/**/*",
--- 		-- "--query-driver=/users/hermanberdnikov/.platformio/packages/toolchain-xtensa-esp32s3/bin/*gcc*",
--- 		"--query-driver=/opt/homebrew/bin/arm-none-eabi-gcc",
--- 	},
--- 	filetypes = { "c", "cpp", "arduino" },
--- 	on_attach = on_attach,
--- 	capabilities = capabilities,
--- })
---
 local function get_clangd_config_path()
 	local sysname = vim.loop.os_uname().sysname
 	local home = vim.loop.os_homedir()
@@ -453,9 +430,9 @@ local function get_clangd_config_path()
 		else
 			return nil
 		end
-	elseif sysname == "darwin" then
+	elseif sysname == "Darwin" then
 		if home then
-			return home .. "/library/preferences/clangd/"
+			return home .. "/Library/Preferences/clangd/"
 		else
 			return nil
 		end
