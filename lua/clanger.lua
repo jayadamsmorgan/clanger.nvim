@@ -397,24 +397,11 @@ local function ShowMenu()
 	vim.api.nvim_set_option_value("cursorline", true, { win = win })
 end
 
-local filetypes
-local capabilities
-local on_attach
-
 -- Public function to setup the plugin
 function M.setup(opts)
 	if opts then
 		if opts.config_list_file then
 			config_list_file = opts.config_list_file
-		end
-		if opts.capabilities then
-			capabilities = opts.capabilities
-		end
-		if opts.on_attach then
-			on_attach = opts.on_attach
-		end
-		if opts.filetypes then
-			filetypes = opts.filetypes
 		end
 	end
 end
@@ -466,35 +453,26 @@ local function LoadActiveConfiguration()
 		return
 	end
 
-	local _, lspconfig = pcall(require, "lspconfig")
-	if not lspconfig then
-		print("LspConfig is missing, unable to set active config...")
-		return
-	end
-
 	local clangd_config_path = get_clangd_config_path()
 	if not clangd_config_path then
 		print("Cannot find Clangd config path, unable to set active config...")
 		return
 	end
+
 	vim.fn.mkdir(clangd_config_path, "p")
+
 	local file = io.open(clangd_config_path .. "config.yaml", "w")
 	if not file then
 		print("Cannot open clangd config file, unable to set active config...")
 		return
 	end
 
-	lspconfig["clangd"].setup({
-		cmd = config_found.clangd_cmd,
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = filetypes,
-	})
-
 	for _, line in ipairs(config_found.clangd_config) do
 		file:write(line .. "\n")
 	end
 	file:close()
+
+	vim.cmd("LspRestart")
 end
 
 M.ShowMenu = ShowMenu
