@@ -467,6 +467,14 @@ local function LoadActiveConfiguration()
 		return
 	end
 
+	local existing = vim.lsp.config.clangd or {}
+	vim.lsp.config(
+		"clangd",
+		vim.tbl_deep_extend("force", existing, {
+			cmd = config_found.clangd_cmd,
+		})
+	)
+
 	for _, line in ipairs(config_found.clangd_config) do
 		file:write(line .. "\n")
 	end
